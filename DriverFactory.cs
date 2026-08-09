@@ -13,6 +13,9 @@ public static class DriverFactory
             options.AddArgument("--headless");
             options.AddArgument("--no-sandbox");
             options.AddArgument("--disable-dev-shm-usage");
+            options.AddArgument("--window-size=1920,1080");
+            options.AddArgument("--disable-extensions");
+            options.AddArgument("--no-first-run");
         }
         return new ChromeDriver(options);
     }
