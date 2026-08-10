@@ -29,6 +29,18 @@ public class SignupPage
         wait.Until(d => d.FindElement(SignupButton)).Click();
     }
 
+    public void SubmitSignupFormWithoutName(string email)
+    {
+        wait.Until(d => d.FindElement(EmailInput)).SendKeys(email);
+        wait.Until(d => d.FindElement(SignupButton)).Click();
+    }
+
+    public void SubmitSignupFormWithoutEmail(string name)
+    {
+        wait.Until(d => d.FindElement(NameInput)).SendKeys(name);
+        wait.Until(d => d.FindElement(SignupButton)).Click();
+    }
+
     public bool ErrorIsDisplayed(string errorText) =>
         wait.Until(d => d.FindElement(PageBody).Text.Contains(errorText));
 }

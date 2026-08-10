@@ -1,4 +1,4 @@
-![.NET](https://img.shields.io/badge/.NET-10-purple) ![Selenium](https://img.shields.io/badge/Selenium-4.46-green) ![NUnit](https://img.shields.io/badge/NUnit-4.3-blue) ![Tests](https://img.shields.io/badge/tests-2-brightgreen)
+![.NET](https://img.shields.io/badge/.NET-10-purple) ![Selenium](https://img.shields.io/badge/Selenium-4.46-green) ![NUnit](https://img.shields.io/badge/NUnit-4.3-blue) ![Tests](https://img.shields.io/badge/tests-5-brightgreen)
 
 # AutomationExerciseTests
 
@@ -28,6 +28,9 @@ RegistrationTests.cs   # Registration flow tests
 |------|-------------|
 | `SignupWithNewEmail_RedirectsToAccountInfoPage` | Submitting a new email redirects to the account information form |
 | `SignupWithExistingEmail_ShowsErrorMessage` | Submitting an already registered email displays "Email Address already exist!" |
+| `SignupWithEmptyName_StaysOnLoginPage` | HTML5 validation prevents submission — page stays on /login |
+| `SignupWithEmptyEmail_StaysOnLoginPage` | HTML5 validation prevents submission — page stays on /login |
+| `CompletedRegistration_ShowsAccountCreatedPage` | Full multi-step registration flow ends at /account_created confirmation |
 
 ## Key Concepts Demonstrated
 - Page Object Model (POM) — separate page classes for each step of a multi-step flow
