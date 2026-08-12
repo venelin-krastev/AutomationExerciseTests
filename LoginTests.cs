@@ -10,20 +10,6 @@ public class LoginTests
     private IWebDriver? driver;
     private LoginPage? loginPage;
 
-    private static readonly string RegisteredEmail =
-        $"qa_login_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}@test.com";
-    private const string RegisteredPassword = "Test1234!";
-
-    [OneTimeSetUp]
-    public void RegisterAccount()
-    {
-        using var setupDriver = DriverFactory.Create();
-        var signup = new SignupPage(setupDriver);
-        signup.NavigateTo();
-        signup.SubmitSignupForm("QA Login User", RegisteredEmail);
-        new AccountInfoPage(setupDriver).CompleteRegistration();
-    }
-
     [SetUp]
     public void Setup()
     {
@@ -42,7 +28,7 @@ public class LoginTests
     [Test]
     public void LoginWithValidCredentials_RedirectsToHomePage()
     {
-        loginPage!.Login(RegisteredEmail, RegisteredPassword);
+        loginPage!.Login(AssemblySetup.RegisteredEmail, AssemblySetup.RegisteredPassword);
 
         Assert.That(driver!.Url, Does.Not.Contain("/login"),
             "Successful login should navigate away from the login page");
@@ -51,7 +37,7 @@ public class LoginTests
     [Test]
     public void LoginWithInvalidPassword_ShowsErrorMessage()
     {
-        loginPage!.Login(RegisteredEmail, "wrongpassword");
+        loginPage!.Login(AssemblySetup.RegisteredEmail, "wrongpassword");
 
         Assert.That(loginPage!.ErrorIsDisplayed("Your email or password is incorrect!"), Is.True,
             "Login with an incorrect password should display an error message");
@@ -60,7 +46,7 @@ public class LoginTests
     [Test]
     public void LoginWithEmptyEmail_StaysOnLoginPage()
     {
-        loginPage!.LoginWithoutEmail(RegisteredPassword);
+        loginPage!.LoginWithoutEmail(AssemblySetup.RegisteredPassword);
 
         Assert.That(driver!.Url, Does.Contain("/login"),
             "Submitting login without an email should not navigate away from login page");
@@ -69,7 +55,7 @@ public class LoginTests
     [Test]
     public void LoginWithEmptyPassword_StaysOnLoginPage()
     {
-        loginPage!.LoginWithoutPassword(RegisteredEmail);
+        loginPage!.LoginWithoutPassword(AssemblySetup.RegisteredEmail);
 
         Assert.That(driver!.Url, Does.Contain("/login"),
             "Submitting login without a password should not navigate away from login page");

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using AutomationExerciseTests.Pages;
 
 namespace AutomationExerciseTests;
@@ -9,20 +10,6 @@ public class RegistrationTests
 {
     private IWebDriver? driver;
     private SignupPage? signupPage;
-
-    private static readonly string ExistingEmail =
-        $"qa_existing_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}@test.com";
-
-    [OneTimeSetUp]
-    public void RegisterExistingEmail()
-    {
-        using var setupDriver = DriverFactory.Create();
-        var page = new SignupPage(setupDriver);
-        page.NavigateTo();
-        page.SubmitSignupForm("QA Setup User", ExistingEmail);
-
-        new AccountInfoPage(setupDriver).CompleteRegistration();
-    }
 
     [SetUp]
     public void Setup()
@@ -46,6 +33,9 @@ public class RegistrationTests
 
         signupPage!.SubmitSignupForm("QA Test User", uniqueEmail);
 
+        new WebDriverWait(driver!, TimeSpan.FromSeconds(15))
+            .Until(d => d.Url.Contains("/signup"));
+
         Assert.That(driver!.Url, Does.Contain("/signup"),
             "Signing up with a new email should redirect to the account information page");
     }
@@ -53,7 +43,7 @@ public class RegistrationTests
     [Test]
     public void SignupWithExistingEmail_ShowsErrorMessage()
     {
-        signupPage!.SubmitSignupForm("QA Test User", ExistingEmail);
+        signupPage!.SubmitSignupForm("QA Test User", AssemblySetup.RegisteredEmail);
 
         Assert.That(signupPage!.ErrorIsDisplayed("Email Address already exist!"), Is.True,
             "Signing up with an already registered email should display an error message");
@@ -83,6 +73,10 @@ public class RegistrationTests
         var uniqueEmail = $"qa_full_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}@test.com";
 
         signupPage!.SubmitSignupForm("QA Full User", uniqueEmail);
+
+        new WebDriverWait(driver!, TimeSpan.FromSeconds(15))
+            .Until(d => d.Url.Contains("/signup"));
+
         new AccountInfoPage(driver!).CompleteRegistration();
 
         Assert.That(driver!.Url, Does.Contain("/account_created"),
