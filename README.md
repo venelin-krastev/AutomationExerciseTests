@@ -17,6 +17,7 @@ Pages/
   SignupPage.cs        # Page Object for signup form (step 1 — name + email)
   AccountInfoPage.cs   # Page Object for account info form (step 2 — full registration)
   LoginPage.cs         # Page Object for login form
+AssemblySetup.cs       # [SetUpFixture] — registers one shared account before all test classes
 DriverFactory.cs       # ChromeDriver factory — headless mode via CI env var
 RegistrationTests.cs   # Registration flow tests (5 tests)
 LoginTests.cs          # Login flow tests (4 tests)
@@ -45,7 +46,8 @@ LoginTests.cs          # Login flow tests (4 tests)
 
 ## Key Concepts Demonstrated
 - Page Object Model (POM) — separate page classes for each step of a multi-step flow
-- `[OneTimeSetUp]` — completes a full account registration once per suite to establish test data
+- `[SetUpFixture]` / `AssemblySetup` — registers ONE shared account before all test classes in the assembly; prevents rate-limiting from multiple registrations in CI
+- `[OneTimeSetUp]` vs `[SetUpFixture]` — class-level vs assembly-level setup; `AssemblySetup` reduces full registrations from 3 to 1 per CI run
 - Dynamic test data — timestamp-based unique email prevents cross-run conflicts
 - `SelectElement` — dropdown interaction for date of birth and country fields
 - `WebDriverWait` with lambda conditions — no `Thread.Sleep`
