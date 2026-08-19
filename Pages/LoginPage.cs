@@ -27,7 +27,10 @@ public class LoginPage
         wait.Until(d => d.FindElement(EmailInput)).SendKeys(email);
         wait.Until(d => d.FindElement(PasswordInput)).SendKeys(password);
         wait.Until(d => d.FindElement(LoginButton)).Click();
-        wait.Until(d => !d.Url.Contains("/login") || d.FindElement(PageBody).Text.Contains("incorrect"));
+        wait.Until(d => {
+            try { return !d.Url.Contains("/login") || d.FindElement(PageBody).Text.Contains("incorrect"); }
+            catch (StaleElementReferenceException) { return false; }
+        });
     }
 
     public void LoginWithoutEmail(string password)
