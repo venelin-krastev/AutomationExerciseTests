@@ -21,9 +21,5 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
-      - name: Install Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
       - name: Test
         run: dotnet test --no-build --verbosity normal
