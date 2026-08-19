@@ -27,6 +27,7 @@ public class LoginPage
         wait.Until(d => d.FindElement(EmailInput)).SendKeys(email);
         wait.Until(d => d.FindElement(PasswordInput)).SendKeys(password);
         wait.Until(d => d.FindElement(LoginButton)).Click();
+        wait.Until(d => !d.Url.Contains("/login") || d.FindElement(PageBody).Text.Contains("incorrect"));
     }
 
     public void LoginWithoutEmail(string password)
@@ -42,5 +43,8 @@ public class LoginPage
     }
 
     public bool ErrorIsDisplayed(string errorText) =>
-        wait.Until(d => d.FindElement(PageBody).Text.Contains(errorText));
+        wait.Until(d => {
+            try { return d.FindElement(PageBody).Text.Contains(errorText); }
+            catch (StaleElementReferenceException) { return false; }
+        });
 }

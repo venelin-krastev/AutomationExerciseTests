@@ -42,5 +42,8 @@ public class SignupPage
     }
 
     public bool ErrorIsDisplayed(string errorText) =>
-        wait.Until(d => d.FindElement(PageBody).Text.Contains(errorText));
+        wait.Until(d => {
+            try { return d.FindElement(PageBody).Text.Contains(errorText); }
+            catch (StaleElementReferenceException) { return false; }
+        });
 }
