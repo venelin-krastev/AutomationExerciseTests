@@ -60,4 +60,24 @@ public class LoginTests
         Assert.That(driver!.Url, Does.Contain("/login"),
             "Submitting login without a password should not navigate away from login page");
     }
+
+    [Test]
+    public void LoginWithNonExistentEmail_ShowsErrorMessage()
+    {
+        loginPage!.Login("no.such.user.qa@example.com", AssemblySetup.RegisteredPassword);
+
+        Assert.That(loginPage!.ErrorIsDisplayed("Your email or password is incorrect!"), Is.True,
+            "An unregistered email should show the same generic error as a wrong password, without revealing whether the account exists");
+    }
+
+    [Test]
+    public void LoginWithWhitespacePaddedEmail_ShowsErrorMessage()
+    {
+        var paddedEmail = $"  {AssemblySetup.RegisteredEmail}  ";
+
+        loginPage!.Login(paddedEmail, AssemblySetup.RegisteredPassword);
+
+        Assert.That(loginPage!.ErrorIsDisplayed("Your email or password is incorrect!"), Is.True,
+            "Leading/trailing whitespace in the email should not be silently trimmed and accepted as a valid match");
+    }
 }
