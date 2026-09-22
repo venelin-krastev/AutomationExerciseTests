@@ -1,4 +1,4 @@
-![.NET](https://img.shields.io/badge/.NET-10-purple) ![Selenium](https://img.shields.io/badge/Selenium-4.46-green) ![NUnit](https://img.shields.io/badge/NUnit-4.3-blue) ![Tests](https://img.shields.io/badge/tests-9-brightgreen)
+![.NET](https://img.shields.io/badge/.NET-10-purple) ![Selenium](https://img.shields.io/badge/Selenium-4.46-green) ![NUnit](https://img.shields.io/badge/NUnit-4.3-blue) ![Tests](https://img.shields.io/badge/tests-11-brightgreen)
 
 # AutomationExerciseTests
 
@@ -20,7 +20,7 @@ Pages/
 AssemblySetup.cs       # [SetUpFixture] — registers one shared account before all test classes
 DriverFactory.cs       # ChromeDriver factory — headless mode via CI env var
 RegistrationTests.cs   # Registration flow tests (5 tests)
-LoginTests.cs          # Login flow tests (4 tests)
+LoginTests.cs          # Login flow tests (6 tests)
 ```
 
 ## Test Coverage
@@ -43,6 +43,8 @@ LoginTests.cs          # Login flow tests (4 tests)
 | `LoginWithInvalidPassword_ShowsErrorMessage` | Wrong password displays "Your email or password is incorrect!" |
 | `LoginWithEmptyEmail_StaysOnLoginPage` | HTML5 validation prevents submission — page stays on /login |
 | `LoginWithEmptyPassword_StaysOnLoginPage` | HTML5 validation prevents submission — page stays on /login |
+| `LoginWithNonExistentEmail_ShowsErrorMessage` | Unregistered email shows the same generic error as a wrong password |
+| `LoginWithWhitespacePaddedEmail_ShowsErrorMessage` | Leading/trailing whitespace in the email is not silently trimmed |
 
 ## Key Concepts Demonstrated
 - Page Object Model (POM) — separate page classes for each step of a multi-step flow
