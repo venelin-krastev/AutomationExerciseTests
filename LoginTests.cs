@@ -71,13 +71,18 @@ public class LoginTests
     }
 
     [Test]
-    public void LoginWithWhitespacePaddedEmail_ShowsErrorMessage()
+    public void LoginWithWhitespacePaddedEmail_StillSucceeds()
     {
+        // The login field is <input type="email">, which applies the HTML5 value sanitization
+        // algorithm — the browser strips leading/trailing whitespace before the value is ever
+        // read by JS or submitted. Confirmed live: SendKeys(" x@y.com ") lands as "x@y.com" in
+        // el.value before any interaction with the site itself. So padded whitespace can't reach
+        // the server as-is through a real browser — login succeeds like a normal valid attempt.
         var paddedEmail = $"  {AssemblySetup.RegisteredEmail}  ";
 
         loginPage!.Login(paddedEmail, AssemblySetup.RegisteredPassword);
 
-        Assert.That(loginPage!.ErrorIsDisplayed("Your email or password is incorrect!"), Is.True,
-            "Leading/trailing whitespace in the email should not be silently trimmed and accepted as a valid match");
+        Assert.That(driver!.Url, Does.Not.Contain("/login"),
+            "Browser-level input sanitization strips the padding before submission, so this should log in successfully, same as unpadded credentials");
     }
 }

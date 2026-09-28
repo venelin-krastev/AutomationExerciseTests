@@ -1,6 +1,6 @@
-# Interview Prep — AutomationExerciseTests
+# Design Notes — AutomationExerciseTests
 
-Real questions a senior QA interviewer would ask when reviewing this project.
+Decisions made in this project, why, and the trade-offs involved.
 
 ---
 
@@ -31,3 +31,11 @@ A: I run smoke tests first — a quick check that the application starts and the
 
 **Q: What is the difference between regression testing and retesting?**
 A: Retesting verifies that a specific bug that was fixed is now resolved — you run the exact scenario that failed before. Regression is broader: you re-run the full suite (or a risk-based subset) to check that the fix has not introduced new failures elsewhere. Both happen after a fix, but they have different scope.
+
+---
+
+## 2026-09-28 — Whitespace-padded email actually succeeds, not fails
+
+**Decision:** `LoginWithWhitespacePaddedEmail_ShowsErrorMessage` was renamed to `LoginWithWhitespacePaddedEmail_StillSucceeds` and its assertion flipped from expecting an error to expecting a successful login.
+**Why:** The test had been red on every CI run since it was added (#12, #13) — `WebDriverTimeoutException` waiting for an error that never appeared. Root cause, confirmed by driving a real browser through the exact scenario (not guessed): the login email field is `<input type="email">`, and per the HTML5 value sanitization algorithm, the browser strips leading/trailing whitespace from the value before it's ever read by JS or submitted — confirmed by reading `el.value` immediately after typing, before any interaction with the site. So a padded email can't actually reach the server padded through a real browser; login succeeds exactly like an unpadded attempt. The original test encoded an impossible premise — no site-level whitespace handling to test here, because the browser itself sanitizes the input first.
+**Trade-off:** none — this isn't a compromise, it's correcting a test that asserted something the platform makes unreachable. If the intent is to test whether the *server* independently trims whitespace (bypassing the browser's own sanitization), that would need an API-level test hitting the endpoint directly, not a Selenium UI test — out of scope here.
