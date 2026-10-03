@@ -44,7 +44,7 @@ LoginTests.cs          # Login flow tests (6 tests)
 | `LoginWithEmptyEmail_StaysOnLoginPage` | HTML5 validation prevents submission — page stays on /login |
 | `LoginWithEmptyPassword_StaysOnLoginPage` | HTML5 validation prevents submission — page stays on /login |
 | `LoginWithNonExistentEmail_ShowsErrorMessage` | Unregistered email shows the same generic error as a wrong password |
-| `LoginWithWhitespacePaddedEmail_ShowsErrorMessage` | Leading/trailing whitespace in the email is not silently trimmed |
+| `LoginWithWhitespacePaddedEmail_StillSucceeds` | Browser's HTML5 `<input type="email">` sanitization strips whitespace before submission — login succeeds, no error |
 
 ## Key Concepts Demonstrated
 - Page Object Model (POM) — separate page classes for each step of a multi-step flow
@@ -56,6 +56,7 @@ LoginTests.cs          # Login flow tests (6 tests)
 - `WebDriverWait` on `body.Text` — robust error detection independent of CSS class names
 - Headless Chrome in CI via `DriverFactory` and `CI` environment variable
 - GitHub Actions CI/CD — automated test run on every push
+- Timestamp-based unique test emails — `DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()` over `Guid.NewGuid()`: equally unique per run, but the timestamp is human-readable in CI logs (tells you when the test account was created)
 
 ## How to Run
 ```bash
