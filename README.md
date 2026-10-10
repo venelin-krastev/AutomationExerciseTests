@@ -49,7 +49,7 @@ LoginTests.cs          # Login flow tests (6 tests)
 ## Key Concepts Demonstrated
 - Page Object Model (POM) — separate page classes for each step of a multi-step flow
 - `[SetUpFixture]` / `AssemblySetup` — registers ONE shared account before all test classes in the assembly; prevents rate-limiting from multiple registrations in CI
-- `[OneTimeSetUp]` vs `[SetUpFixture]` — class-level vs assembly-level setup; `AssemblySetup` reduces full registrations from 3 to 1 per CI run
+- `[OneTimeSetUp]` vs `[SetUpFixture]` — `[OneTimeSetUp]` inside a `[TestFixture]` runs once per class; `[SetUpFixture]` is assembly-level — runs once before all test classes in the project; `AssemblySetup` uses `[SetUpFixture]` + `[OneTimeSetUp]` to register ONE shared account before all test classes, reducing full registrations from 3 to 1 per CI run
 - Dynamic test data — timestamp-based unique email prevents cross-run conflicts
 - `SelectElement` — dropdown interaction for date of birth and country fields
 - `WebDriverWait` with lambda conditions — no `Thread.Sleep`
