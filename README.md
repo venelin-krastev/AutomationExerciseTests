@@ -65,3 +65,4 @@ dotnet test
 
 ## Author
 Venelin Krastev — Junior QA Automation Engineer, Sofia
+[linkedin.com/in/vvkrastev](https://linkedin.com/in/vvkrastev) · [github.com/venelin-krastev](https://github.com/venelin-krastev)
