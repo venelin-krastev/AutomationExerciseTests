@@ -42,6 +42,16 @@ A: Retesting verifies that a specific bug that was fixed is now resolved — you
 
 ---
 
+## 2026-10-23 — Cart + Checkout Flow Architecture
+
+**Decision:** Each step in the checkout flow (Product → Cart → Checkout → Payment → Confirmation) is a separate Page Object. Each page method returns the *next* page in the flow rather than `void`.
+
+**Why:** Returning the next Page Object enforces the correct navigation sequence at compile time — you can't call `ProceedToCheckout()` without first having a `CartPage`. It also enables method chaining: `productPage.AddToCartAndViewCart().ProceedToCheckout().ProceedToPayment()`.
+
+**Trade-off:** A stricter alternative would be to inject all pages via a shared page factory, which avoids pages constructing each other directly. For this project's scope (linear happy-path flow, no branching navigation), the return-next-page pattern is simpler and sufficient.
+
+---
+
 ## 2026-10-01 — Why `DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()` instead of `Guid.NewGuid()` for unique test emails
 
 **Decision:** `AssemblySetup.cs` and `RegistrationTests.cs` generate unique test emails as `$"qa_shared_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}@test.com"` rather than using a GUID.
