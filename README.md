@@ -14,13 +14,19 @@ Selenium WebDriver E2E test suite for [automationexercise.com](https://www.autom
 ## Project Structure
 ```
 Pages/
-  SignupPage.cs        # Page Object for signup form (step 1 — name + email)
-  AccountInfoPage.cs   # Page Object for account info form (step 2 — full registration)
-  LoginPage.cs         # Page Object for login form
-AssemblySetup.cs       # [SetUpFixture] — registers one shared account before all test classes
-DriverFactory.cs       # ChromeDriver factory — headless mode via CI env var
-RegistrationTests.cs   # Registration flow tests (5 tests)
-LoginTests.cs          # Login flow tests (6 tests)
+  SignupPage.cs              # Page Object for signup form (step 1 — name + email)
+  AccountInfoPage.cs         # Page Object for account info form (step 2 — full registration)
+  LoginPage.cs               # Page Object for login form
+  ProductPage.cs             # Page Object for individual product page
+  CartPage.cs                # Page Object for shopping cart
+  CheckoutPage.cs            # Page Object for checkout address/review step
+  PaymentPage.cs             # Page Object for payment details form
+  OrderConfirmationPage.cs   # Page Object for order confirmation
+AssemblySetup.cs             # [SetUpFixture] — registers one shared account before all test classes
+DriverFactory.cs             # ChromeDriver factory — headless mode via CI env var
+RegistrationTests.cs         # Registration flow tests (5 tests)
+LoginTests.cs                # Login flow tests (6 tests)
+CartCheckoutTests.cs         # Cart and checkout flow tests (4 tests)
 ```
 
 ## Test Coverage
@@ -62,6 +68,15 @@ LoginTests.cs          # Login flow tests (6 tests)
 ```bash
 dotnet test
 ```
+
+### CartCheckoutTests.cs
+
+| Test | Description |
+|------|-------------|
+| `AddProductToCart_IncreasesCartItemCount` | Adding a product increases the cart item count above zero |
+| `AddProductToCart_CartIsNotEmpty` | Cart is not empty after adding a product |
+| `CheckoutPage_ShowsCartItems_WhenLoggedIn` | Checkout page displays cart items when user is logged in |
+| `PlaceOrder_WithValidPaymentDetails_ShowsOrderConfirmation` | Full checkout flow with valid card details ends at order confirmation |
 
 ## Author
 Venelin Krastev — Junior QA Automation Engineer, Sofia
