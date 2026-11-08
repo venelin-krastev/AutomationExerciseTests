@@ -52,6 +52,16 @@ A: Retesting verifies that a specific bug that was fixed is now resolved — you
 
 ---
 
+## 2026-10-28 — `[SetUp]` vs `[OneTimeSetUp]` in CartCheckoutTests
+
+**Decision:** `CartCheckoutTests` uses `[SetUp]` (runs before every test) rather than `[OneTimeSetUp]` (runs once per class) for driver creation and login.
+
+**Why:** Each cart test modifies shared state — adding items to the cart, navigating through checkout. If driver and login were initialised once and shared across all four tests, a product added in test 1 would still be in the cart when test 2 starts. That is state leakage: test 2's outcome depends on test 1's side effects, violating test isolation. `[SetUp]` guarantees every test starts from a clean browser session and an empty cart.
+
+**Trade-off:** `[OneTimeSetUp]` is faster — one driver creation and one login per class instead of four. This trade-off is acceptable here because test isolation is non-negotiable for stateful flows. For stateless operations (e.g. reading a RestClient base URL in `BaseApiTest`), `[OneTimeSetUp]` is the right choice precisely because there is no mutable shared state to pollute.
+
+---
+
 ## 2026-10-01 — Why `DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()` instead of `Guid.NewGuid()` for unique test emails
 
 **Decision:** `AssemblySetup.cs` and `RegistrationTests.cs` generate unique test emails as `$"qa_shared_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}@test.com"` rather than using a GUID.
