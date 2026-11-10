@@ -62,6 +62,16 @@ A: Retesting verifies that a specific bug that was fixed is now resolved — you
 
 ---
 
+## 2026-11-09 — Equivalence Partitioning vs Risk-based prioritisation — two different questions
+
+**Decision:** These two techniques answer fundamentally different questions and must never be confused.
+
+**Why:** EP answers *"which input values should I use for this test?"* — it divides the input space into equivalence classes (valid, too low, too high) and tests one representative per class. It operates inside a single test case, on a single field or condition. Risk-based prioritisation answers *"which test cases should I run from my suite of 200?"* — it ranks tests by the probability of finding a defect multiplied by the business impact of that defect. It operates at the suite level, not the input level. Using EP to decide which tests to skip from a regression suite is a category error: EP has no concept of business risk, historical defect data, or changed modules.
+
+**Trade-off:** None — these are not alternatives. A tester uses both: risk-based to decide which 40 of 200 tests to run in a 2-hour window, then EP inside each of those 40 tests to pick the right data values.
+
+---
+
 ## 2026-10-01 — Why `DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()` instead of `Guid.NewGuid()` for unique test emails
 
 **Decision:** `AssemblySetup.cs` and `RegistrationTests.cs` generate unique test emails as `$"qa_shared_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}@test.com"` rather than using a GUID.
