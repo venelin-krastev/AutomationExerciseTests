@@ -9,7 +9,8 @@ public class CheckoutPage
     private readonly WebDriverWait wait;
 
     private static readonly By OrderCommentField = By.CssSelector("[name='message']");
-    private static readonly By PlaceOrderButton = By.CssSelector("[data-qa='place-order']");
+    // Site removed data-qa attribute; use href-based selector.
+    private static readonly By PlaceOrderButton = By.CssSelector("a[href='/payment']");
     private static readonly By CartSection = By.Id("cart_items");
 
     public CheckoutPage(IWebDriver driver)

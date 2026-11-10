@@ -9,7 +9,8 @@ public class CartPage
     private readonly WebDriverWait wait;
 
     private static readonly By CartRows = By.CssSelector("#cart_info_table tbody tr");
-    private static readonly By ProceedToCheckoutButton = By.CssSelector("[data-qa='proceed-to-checkout']");
+    // Site removed data-qa attribute; current selector is the .check_out CSS class.
+    private static readonly By ProceedToCheckoutButton = By.CssSelector("a.check_out");
     private static readonly By LoginToCheckoutLink = By.CssSelector(".modal-body a[href='/login']");
 
     public CartPage(IWebDriver driver)

@@ -8,7 +8,8 @@ public class ProductPage
     private readonly IWebDriver driver;
     private readonly WebDriverWait wait;
 
-    private static readonly By AddToCartButton = By.CssSelector("[data-qa='add-to-cart']");
+    // Site removed data-qa='add-to-cart' attribute; current selector is the .cart class on the button.
+    private static readonly By AddToCartButton = By.CssSelector("button.cart");
     private static readonly By ContinueShoppingButton = By.CssSelector("[data-dismiss='modal']");
     private static readonly By ViewCartLink = By.CssSelector("p > a[href='/view_cart']");
 
@@ -23,7 +24,7 @@ public class ProductPage
 
     public ProductPage AddToCart()
     {
-        wait.Until(d => d.FindElement(AddToCartButton)).Click();
+        JsClick(wait.Until(d => d.FindElement(AddToCartButton)));
         // Modal appears after add — dismiss it to stay on product page
         wait.Until(d => d.FindElement(ContinueShoppingButton)).Click();
         return this;
@@ -31,9 +32,14 @@ public class ProductPage
 
     public CartPage AddToCartAndViewCart()
     {
-        wait.Until(d => d.FindElement(AddToCartButton)).Click();
-        // Modal appears — click "View Cart" instead of "Continue Shopping"
-        wait.Until(d => d.FindElement(ViewCartLink)).Click();
+        JsClick(wait.Until(d => d.FindElement(AddToCartButton)));
+        // Modal appears — click "View Cart". Modal animation may still be running so use JS click.
+        JsClick(wait.Until(d => d.FindElement(ViewCartLink)));
         return new CartPage(driver);
     }
+
+    // The site shows ad overlays that intercept regular Selenium clicks.
+    // JS click bypasses the overlay and fires directly on the element.
+    private void JsClick(IWebElement element) =>
+        ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", element);
 }
