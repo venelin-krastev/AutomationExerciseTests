@@ -1,4 +1,4 @@
-![.NET](https://img.shields.io/badge/.NET-10-purple) ![Selenium](https://img.shields.io/badge/Selenium-4.46-green) ![NUnit](https://img.shields.io/badge/NUnit-4.3-blue) ![Tests](https://img.shields.io/badge/tests-15-brightgreen)
+![CI](https://github.com/Krast3v/AutomationExerciseTests/actions/workflows/dotnet.yml/badge.svg) ![.NET](https://img.shields.io/badge/.NET-10-purple) ![Selenium](https://img.shields.io/badge/Selenium-4.46-green) ![NUnit](https://img.shields.io/badge/NUnit-4.3-blue) ![Tests](https://img.shields.io/badge/tests-15-brightgreen)
 
 # AutomationExerciseTests
 
