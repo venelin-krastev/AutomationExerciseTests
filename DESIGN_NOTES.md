@@ -62,6 +62,16 @@ A: Retesting verifies that a specific bug that was fixed is now resolved — you
 
 ---
 
+## 2026-11-23 — JS click as a targeted workaround for ad overlay interception
+
+**Decision:** `ProductPage` uses `IJavaScriptExecutor.ExecuteScript("arguments[0].click();", element)` instead of the standard Selenium `.Click()` for the add-to-cart button and the view-cart modal link.
+
+**Why:** automationexercise.com serves ad overlay iframes that intercept Selenium's synthetic click event and throw `ElementClickInterceptedException`. The JS click fires directly on the DOM element, bypassing the overlay entirely. The approach is intentionally narrow — only two elements in `ProductPage` use it; everything else in the suite uses standard `.Click()`.
+
+**Trade-off:** JS click bypasses Selenium's interactability check, which means it can mask a genuine bug where the element is hidden from the user. It is only appropriate when: (1) the element is visually present and the obstruction is a known third-party ad, not application UI; (2) a standard click has been confirmed to fail with `ElementClickInterceptedException`. Using it broadly would reduce the suite's ability to catch real visibility defects.
+
+---
+
 ## 2026-11-09 — Equivalence Partitioning vs Risk-based prioritisation — two different questions
 
 **Decision:** These two techniques answer fundamentally different questions and must never be confused.
